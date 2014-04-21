@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Remove last box
-rm -f build/vmware/*.box
+rm -f build/*.box
 
 #Build new box
 cd templates/ubuntu
