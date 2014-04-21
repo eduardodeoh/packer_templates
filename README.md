@@ -3,7 +3,7 @@ Description
 
 Base boxes build with packer for use with vagrant.
 This repository includes the packer templates to build the basebox.
-The build boxes are available through [Amazon S3](https://eduardodeoh-vagrant-boxes.s3.amazonaws.com/) and [VagrantCloud](https://vagrantcloud.com/eduardodeoh).
+The build boxes are available through [VagrantCloud](https://vagrantcloud.com/eduardodeoh).
 
 Requirements
 ============
