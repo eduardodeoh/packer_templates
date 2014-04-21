@@ -1,0 +1,84 @@
+{
+  "description": "Template for build Ubuntu 14.04 - Trusty image",
+
+  "variables": {
+    "box_name": "ubuntu-14.04-server-amd64",
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04-server-amd64.iso",
+    "iso_checksum": "4d94f6111b8fe47da94396180ce499d8c0bb44f3",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant"
+  },
+
+  "builders": [
+    {
+      "type": "vmware-iso",
+      "name": "vmware_fusion",
+      "vm_name": "{{ user `box_name` }}",
+      "guest_os_type": "ubuntu-64",
+      "http_directory": "http",
+      "headless": false,
+      "iso_url": "{{ user `iso_url` }}",
+      "iso_checksum": "{{ user `iso_checksum` }}",
+      "iso_checksum_type": "sha1",
+      "ssh_username": "{{ user `ssh_username` }}",
+      "ssh_password": "{{ user `ssh_password` }}",
+      "ssh_wait_timeout": "10000s",
+      "tools_upload_flavor": "linux",
+      "shutdown_command": "echo {{ user `ssh_username` }} |sudo -S shutdown -P now",
+      "shutdown_timeout": "5m",
+      "boot_wait": "5s",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz auto",
+        " console-setup/ask_detect=false",
+        " console-setup/layoutcode=us",
+        " console-setup/modelcode=pc105",
+        " debconf/frontend=noninteractive",
+        " debian-installer=en_US",
+        " fb=false",
+        " initrd=/install/initrd.gz",
+        " kbd-chooser/method=us",
+        " keyboard-configuration/layout=USA",
+        " keyboard-configuration/variant=USA",
+        " locale=en_US",
+        " netcfg/get_domain=vm",
+        " netcfg/get_hostname={{ .Name }}",
+        " noapic",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg",
+        " -- ",
+        "<enter>"
+      ],
+      "disk_size": 40000,
+      "disk_type_id": "1",
+      "vmx_data": {
+        "memsize": "512",
+        "numvcpus": "1",
+        "cpuid.coresPerSocket": "1"
+      }
+    }
+  ],
+
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/base.sh",
+        "scripts/sshd.sh",
+        "scripts/networking.sh",
+        "scripts/vagrant.sh",
+        "scripts/vmtools.sh",
+        "scripts/cleanup.sh"
+
+      ]
+    }
+  ],
+
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false,
+      "output": "../../build/{{ user `box_name` }}_{{ .Provider }}.box"
+    }
+  ]
+}
