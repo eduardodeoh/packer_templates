@@ -68,8 +68,28 @@
         "scripts/networking.sh",
         "scripts/vagrant.sh",
         "scripts/vmtools.sh",
-        "scripts/cleanup.sh"
+        "scripts/ansible.sh"
 
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "../../ansible/playbooks/vagrant_rails.yml",
+      "role_paths": [
+        "../../ansible/roles/vagrant_common",
+        "../../ansible/roles/git",
+        "../../ansible/roles/nodejs",
+        "../../ansible/roles/rbenv",
+        "../../ansible/roles/ruby",
+        "../../ansible/roles/git_crypt",
+        "../../ansible/roles/postgresql"
+      ]
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "scripts/cleanup.sh"
       ]
     }
   ],
