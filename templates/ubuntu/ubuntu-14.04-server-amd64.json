@@ -67,6 +67,7 @@
         "scripts/sshd.sh",
         "scripts/networking.sh",
         "scripts/vagrant.sh",
+        "scripts/memory_and_swapping_account_for_docker.sh",
         "scripts/vmtools.sh",
         "scripts/cleanup.sh"
 
